@@ -10,10 +10,6 @@ sudo yum install -y httpd
 sudo systemctl start httpd
 sudo systemctl enable httpd
 
-# Create a simple HTML page with instance info
-INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
-
 sudo bash -c "cat > /var/www/html/index.html" <<EOF
 <!DOCTYPE html>
 <html>
@@ -27,13 +23,7 @@ sudo bash -c "cat > /var/www/html/index.html" <<EOF
     </style>
 </head>
 <body>
-    <h1>Hello World from DevOps Assessment!</h1>
-    <div class="info">
-        <h2>Instance Information</h2>
-        <p><strong>Instance ID:</strong> $INSTANCE_ID</p>
-        <p><strong>Public IP:</strong> $PUBLIC_IP</p>
-        <p><strong>Region:</strong> $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/.$//')</p>
-    </div>
+    <h1>Hello World </h1>
 </body>
 </html>
 EOF
