@@ -88,26 +88,7 @@ Before running this project, ensure you have:
    - Set GitHub repo and path to Jenkinsfile  
    - Set **Poll SCM**: `* * * * *`  
 
-**Step 1: Clone the Repository**
-```bash
-git clone https://github.com/your-username/devops-assessment-[your-name].git
-cd devops-assessment-[your-name]
-```
 
-**Step 2: Configure AWS Credentials**
-```bash
-aws configure
-```
-
-**Step 3: Jenkins Setup**  
-1. Install Required Plugins  
-2. Add AWS Credentials to Jenkins (Global Credentials)  
-3. Create a New Pipeline (Pipeline script from SCM)  
-4. Configure Poll SCM (Set schedule: `H/5 * * * *`)  
-
-> Note: Replace GitHub Webhook with Poll SCM schedule.  
-
----
 
 ### 5. Pipeline Execution Flow
 
