@@ -4,8 +4,8 @@
 This project implements an automated CI/CD pipeline for provisioning AWS infrastructure using Terraform, triggered by GitHub commits and managed via Jenkins.
 
 ## Architecture
-![Architecture Diagram](docs/architecture-diagram.png)
 
+![1000648230](https://github.com/user-attachments/assets/dc8647b4-08dc-4e03-9475-4f65e7f3b1f5)
 
 
 The solution consists of:
