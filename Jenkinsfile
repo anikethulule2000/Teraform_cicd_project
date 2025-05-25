@@ -51,35 +51,26 @@ pipeline {
         }
 
         stage('Verify Deployment') {
-            steps {
-                script {
-                    def WEB_URL = sh(script: 'terraform output -raw web_server_url', returnStdout: true).trim()
-                    echo "Web server URL: ${WEB_URL}"
+			steps {
+				script {
+					def WEB_URL = sh(script: 'terraform output -raw web_server_url', returnStdout: true).trim()
+					echo "Web server URL: ${WEB_URL}"
 
-                    int retries = 5
-                    boolean success = false
+					echo "Waiting for 2 minutes before verifying the deployment..."
+					sleep(time: 3, unit: 'MINUTES')
 
-                    for (int i = 1; i <= retries; i++) {
-                        def response = sh(script: "curl -s -o /dev/null -w \"%{http_code}\" ${WEB_URL}", returnStdout: true).trim()
-                        if (response == '200') {
-                            echo "Website is running fine. HTTP Status: ${response}"
-                            success = true
-                            break
-                        } else {
-                            echo "Attempt ${i}: Website not ready yet (HTTP ${response}). Retrying in 10 seconds..."
-                            sleep 10
-                        }
-                    }
+					def response = sh(script: "curl -s -o /dev/null -w \"%{http_code}\" ${WEB_URL}", returnStdout: true).trim()
+					if (response == '200') {
+						echo "Website is running fine. HTTP Status: ${response}"
+					} else {
+						error("Website verification failed. HTTP Status: ${response}")
+					}
 
-                    if (!success) {
-                        error("Website verification failed after ${retries} attempts.")
-                    }
-
-                    // Save WEB_URL to env for use in post block
-                    env.DEPLOYED_URL = WEB_URL
-                }
-            }
-        }
+					// Save WEB_URL to env for use in post block
+					env.DEPLOYED_URL = WEB_URL
+				}
+			}
+		}
     }
 
     post {
