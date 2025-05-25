@@ -60,6 +60,34 @@ Before running this project, ensure you have:
 
 ### 4. Setup Instructions
 
+### Jenkins Setup (Including Mail Configuration)
+
+1. **Install Required Jenkins Plugins**  
+   - Terraform Plugin  
+   - Git Plugin  
+   - Pipeline Plugin  
+   - Email Extension Plugin  
+
+2. **Add AWS Credentials to Jenkins**  
+   - Go to: `Manage Jenkins` → `Manage Credentials` → `Global`  
+   - Add AWS keys as secret text or username/password  
+
+3. **Configure Email Notification**  
+   - Go to: `Manage Jenkins` → `Configure System`  
+   - Under **E-mail Notification**:  
+     - SMTP Server: e.g., `smtp.gmail.com`  
+     - Use SMTP Authentication: Yes  
+     - Provide email credentials  
+     - SMTP Port: 465 (SSL) or 587 (TLS)  
+      
+
+
+4. **Create a New Pipeline Job**  
+   - Choose **Pipeline** type  
+   - Use **Pipeline script from SCM**  
+   - Set GitHub repo and path to Jenkinsfile  
+   - Set **Poll SCM**: `* * * * *`  
+
 **Step 1: Clone the Repository**
 ```bash
 git clone https://github.com/your-username/devops-assessment-[your-name].git
