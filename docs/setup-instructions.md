@@ -1,45 +1,163 @@
-# DevOps Assessment: Automated AWS Deployment Pipeline
+# DevOps Assessment Documentation
 
-## Overview
-This project implements an automated CI/CD pipeline for provisioning AWS infrastructure using Terraform, triggered by GitHub commits and managed via Jenkins.
+## Automated AWS Deployment Pipeline with Terraform, GitHub, and Jenkins
 
+---
 
+### 1. Project Overview
 
-## Prerequisites
-- AWS account with IAM credentials
-- GitHub account
-- Jenkins server
-- Terraform installed
-- AWS CLI configured
+This project automates the deployment of a web application on AWS using Infrastructure as Code (IaC) with Terraform, triggered by GitHub commits, and managed via Jenkins CI/CD pipeline.
 
-## Setup Instructions
-1. Clone this repository
-2. Configure AWS credentials in Jenkins
-3. Configure mail in jenkins system
-4. Create a Jenkins pipeline using the provided Jenkinsfile
-5. Push changes to GitHub to trigger the pipeline
+**Key Features**
 
-## How to Run
-1. Push changes to the main branch to trigger the pipeline
-2. Jenkins will:
-   - Initialize Terraform
-   - Generate execution plan
-   - Wait for manual approval
-   - Apply changes if approved
-   - Verify deployment
+- ✓ Infrastructure as Code (IaC) – AWS resources defined in Terraform  
+- ✓ Automated CI/CD Pipeline – Triggered by GitHub commits (Poll SCM)  
+- ✓ Secure AWS Environment – VPC, Subnets, Security Groups with least privilege  
+- ✓ Self-Documented – Clear README, architecture diagram, and setup instructions  
+- ✓ Manual Approval Gate – Ensures controlled deployments  
 
-## Accessing the Application
-After successful deployment, the web application will be available at:
-`http://<EC2_PUBLIC_IP>`
+---
 
-The URL will be displayed in the Jenkins pipeline output.
+### 2. Architecture Diagram
 
-## Cleanup
-To destroy all resources:
-1. Run `terraform destroy` manually
-2. Or create a separate pipeline stage for destruction
+![architecture-diagram](https://github.com/user-attachments/assets/0584e617-d441-4e2b-bd93-098838f3e1fd)
 
-## Security Considerations
-- AWS credentials are stored securely in Jenkins
-- Security groups follow least-privilege principle
-- No sensitive data is committed to Git
+**AWS Components**
+
+- VPC (10.0.0.0/16) with Public & Private Subnets  
+- EC2 Instance (t2.micro) running Apache Web Server  
+- Security Groups (HTTP/HTTPS/SSH access)  
+- Internet Gateway & Route Tables  
+- Jenkins Pipeline (Terraform Init →  Plan → Approve → Apply)  
+
+---
+
+### 3. Prerequisites
+
+Before running this project, ensure you have:
+
+**1. AWS Account**  
+- IAM User with Programmatic Access (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)  
+- Required Permissions:  
+  - `AmazonEC2FullAccess`  
+  - `AmazonVPCFullAccess`  
+  - `IAMReadOnlyAccess` (optional)  
+
+**2. GitHub Account**  
+- A repository to store Terraform code  
+
+**3. Jenkins Server**  
+- Installed and accessible (local/cloud)  
+- Plugins:  
+  - Terraform  
+
+**4. Local Machine Setup**  
+- Terraform (v1.0+)  
+- AWS CLI (configured with credentials)  
+- Git  
+
+---
+
+### 4. Setup Instructions
+
+**Step 1: Clone the Repository**
+```bash
+git clone https://github.com/your-username/devops-assessment-[your-name].git
+cd devops-assessment-[your-name]
+```
+
+**Step 2: Configure AWS Credentials**
+```bash
+aws configure
+```
+
+**Step 3: Jenkins Setup**  
+1. Install Required Plugins  
+2. Add AWS Credentials to Jenkins (Global Credentials)  
+3. Create a New Pipeline (Pipeline script from SCM)  
+4. Configure Poll SCM (Set schedule: `H/5 * * * *`)  
+
+> Note: Replace GitHub Webhook with Poll SCM schedule.  
+
+---
+
+### 5. Pipeline Execution Flow
+
+| Stage                | Action                                      |
+|----------------------|---------------------------------------------|
+| 1. Checkout          | Pulls latest code from GitHub               |
+| 2. Terraform Init    | Initializes Terraform backend               |
+| 3. Terraform Validate| Validates Terraform configuration files     |
+| 4. Terraform Plan    | Shows infrastructure changes                |
+| 5. Manual Approval   | Requires admin approval before applying     |
+| 6. Terraform Apply   | Provisions AWS resources                    |
+| 7. Verify Deployment | Checks if the web server is accessible (HTTP 200) |
+
+---
+
+### 6. Accessing the Deployed Application
+
+After successful deployment:  
+- Web Server URL: `http://<EC2_PUBLIC_IP>`  
+- Find Public IP:
+```bash
+terraform output web_server_public_ip
+```
+
+**Expected Output:**  
+- "Hello World"
+
+---
+
+### 7. Cleanup (Destroy Infrastructure)
+
+**Option 1: Manual Cleanup**
+```bash
+terraform destroy
+```
+
+**Option 2: Jenkins Cleanup Stage (Optional)**
+
+Add a post-build stage in `Jenkinsfile`:
+```groovy
+post {
+  cleanup {
+    sh 'terraform destroy -auto-approve'
+  }
+}
+```
+
+---
+
+### 8. Security Best Practices
+
+- IAM Least Privilege – Only necessary permissions  
+- No Hardcoded Secrets – AWS keys stored in Jenkins credentials  
+- Secure Subnets – Private subnet for databases (future use)  
+- Terraform State Security – Remote backend with S3 & DynamoDB (optional)  
+
+---
+
+### 9. Troubleshooting
+
+| Issue                  | Solution                                  |
+|------------------------|-------------------------------------------|
+| Jenkins not triggering | Check Poll SCM schedule and Jenkins logs |
+| Terraform Plan Errors  | Run `terraform validate` locally         |
+| EC2 Not Accessible     | Verify Security Groups & Route Tables     |
+| Apache Not Running     | Check EC2 user_data logs (`/var/log/cloud-init-output.log`) |
+
+---
+
+### 10. Future Improvements
+
+- Remote State Management (S3 + DynamoDB)  
+- Multi-Environment Support (Dev/Staging/Prod)  
+- Blue-Green Deployments (Using Load Balancer)  
+- Infrastructure Testing (Terratest)  
+
+---
+
+### Conclusion
+
+This project demonstrates a fully automated AWS deployment pipeline using Terraform + Jenkins + GitHub, following Infrastructure as Code (IaC) and DevOps best practices.
