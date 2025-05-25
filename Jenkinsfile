@@ -23,16 +23,35 @@ pipeline {
         
         stage('Terraform Validate') {
             steps {
-                sh 'terraform destroy -auto-approve'
+                sh 'terraform validate'
             }
         }
         
-       
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
+        
         
        
 
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply -auto-approve tfplan'
+            }
+        }
         
-        
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    def WEB_URL = sh(script: 'terraform output -raw web_server_url', returnStdout: true).trim()
+                    echo "Web server URL: ${WEB_URL}"
+                    
+                    
+                }
+            }
+        }
     }
     
     post {
@@ -46,6 +65,9 @@ pipeline {
         failure {
             echo 'Pipeline failed!'
         }
-        
+        cleanup {
+            // Clean up workspace
+            cleanWs()
+        }
     }
 }
