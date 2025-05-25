@@ -33,12 +33,18 @@ pipeline {
             }
         }
         
+        
         stage('Manual Approval') {
             steps {
-                input message: 'Approve Terraform Apply?', ok: 'Apply'
+                script {
+                    echo "Waiting for manual approval..."
+                    timeout(time: 10, unit: 'MINUTES') {
+                        input message: 'Approve Terraform Apply?', ok: 'Apply'
+                    }
+                }
             }
         }
-        
+
         stage('Terraform Apply') {
             steps {
                 sh 'terraform apply -auto-approve tfplan'
