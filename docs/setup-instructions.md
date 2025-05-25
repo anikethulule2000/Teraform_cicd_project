@@ -49,7 +49,10 @@ Before running this project, ensure you have:
 **3. Jenkins Server**  
 - Installed and accessible (local/cloud)  
 - Plugins:  
-  - Terraform  
+  - Terraform
+   - Git 
+   - Pipeline 
+   - Email Extension 
 
 **4. Local Machine Setup**  
 - Terraform (v1.0+)  
