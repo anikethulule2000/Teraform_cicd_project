@@ -80,6 +80,9 @@ pipeline {
                     if (!success) {
                         error("Website verification failed after ${retries} attempts.")
                     }
+
+                    // Save WEB_URL to env for use in post block
+                    env.DEPLOYED_URL = WEB_URL
                 }
             }
         }
@@ -88,9 +91,30 @@ pipeline {
     post {
         success {
             echo 'Pipeline succeeded!'
+            mail to: 'your-team@example.com',
+                 subject: "SUCCESS: Jenkins Pipeline '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: """Good news!
+
+The pipeline has completed successfully.
+
+Job: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Build URL: ${env.BUILD_URL}
+Website URL: ${env.DEPLOYED_URL}
+"""
         }
         failure {
             echo 'Pipeline failed!'
+            mail to: 'your-team@example.com',
+                 subject: "FAILURE: Jenkins Pipeline '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: """Attention required!
+
+The pipeline has failed.
+
+Job: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Build URL: ${env.BUILD_URL}
+"""
         }
     }
 }
