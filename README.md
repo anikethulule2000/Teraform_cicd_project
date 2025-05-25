@@ -24,8 +24,9 @@ The solution consists of:
 ## Setup Instructions
 1. Clone this repository
 2. Configure AWS credentials in Jenkins
-3. Create a Jenkins pipeline using the provided Jenkinsfile
-4. Push changes to GitHub to trigger the pipeline
+3. Configure mail in jenkins system
+4. Create a Jenkins pipeline using the provided Jenkinsfile
+5. Push changes to GitHub to trigger the pipeline
 
 ## How to Run
 1. Push changes to the main branch to trigger the pipeline
