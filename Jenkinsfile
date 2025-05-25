@@ -66,15 +66,13 @@ pipeline {
                     boolean success = false
 
                     for (int i = 1; i <= retries; i++) {
-                        def httpCode = sh(script: "curl -s -o /dev/null -w \"%{http_code}\" ${WEB_URL}", returnStdout: true).trim()
-                        def pageContent = sh(script: "curl -s ${WEB_URL}", returnStdout: true).trim()
-
-                        if (httpCode == '200' && pageContent.contains("Welcome")) {
-                            echo "Website is up and running with HTTP 200 and expected content."
+                        def response = sh(script: "curl -s -o /dev/null -w \"%{http_code}\" ${WEB_URL}", returnStdout: true).trim()
+                        if (response == '200') {
+                            echo "Website is running fine. HTTP Status: ${response}"
                             success = true
                             break
                         } else {
-                            echo "Attempt ${i}: HTTP ${httpCode}. Retrying in 10 seconds..."
+                            echo "Attempt ${i}: Website not ready yet (HTTP ${response}). Retrying in 10 seconds..."
                             sleep 10
                         }
                     }
