@@ -34,16 +34,7 @@ pipeline {
         }
         
         
-        stage('Manual Approval') {
-            steps {
-                script {
-                    echo "Waiting for manual approval..."
-                    timeout(time: 10, unit: 'MINUTES') {
-                        input message: 'Approve Terraform Apply?', ok: 'Apply'
-                    }
-                }
-            }
-        }
+       
 
         stage('Terraform Apply') {
             steps {
