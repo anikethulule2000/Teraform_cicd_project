@@ -66,7 +66,7 @@ pipeline {
 						error("Website verification failed. HTTP Status: ${response}")
 					}
 
-					// Save WEB_URL to env for use in post block
+					
 					env.DEPLOYED_URL = WEB_URL
 				}
 			}
