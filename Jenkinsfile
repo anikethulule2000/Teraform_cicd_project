@@ -34,7 +34,20 @@ pipeline {
         }
         
         
-       
+        stage('Manual Approval') {
+            steps {
+                script {
+                    def userInput = input(
+                        id: 'userInput', message: 'Do you want to proceed?', parameters: [
+                            choice(name: 'Proceed', choices: ['Yes', 'No'], description: 'Select Yes to continue')
+                        ]
+                    )
+                    if (userInput == 'No') {
+                        error("Pipeline stopped by user.")
+                    }
+                }
+            }
+        }
 
         stage('Terraform Apply') {
             steps {
@@ -43,21 +56,24 @@ pipeline {
         }
         
         stage('Verify Deployment') {
-            steps {
-                script {
-                    def WEB_URL = sh(script: 'terraform output -raw web_server_url', returnStdout: true).trim()
-                    echo "Web server URL: ${WEB_URL}"
-                    
-                    
-                }
-            }
-        }
+			steps {
+				script {
+					def WEB_URL = sh(script: 'terraform output -raw web_server_url', returnStdout: true).trim()
+					echo "Web server URL: ${WEB_URL}"
+
+					def response = sh(script: "curl -s -o /dev/null -w \"%{http_code}\" ${WEB_URL}", returnStdout: true).trim()
+					if (response == '200') {
+						echo "Website is running fine. HTTP Status: ${response}"
+					} else {
+						error("Website verification failed. HTTP Status: ${response}")
+					}
+				}
+			}
+		}
+
     }
     
     post {
-        always {
-            echo 'Pipeline completed'
-        }
         success {
             echo 'Pipeline succeeded!'
             
@@ -65,9 +81,6 @@ pipeline {
         failure {
             echo 'Pipeline failed!'
         }
-        cleanup {
-            // Clean up workspace
-            cleanWs()
-        }
+        
     }
 }
