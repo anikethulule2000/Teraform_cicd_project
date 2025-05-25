@@ -10,4 +10,4 @@ sudo yum install -y httpd
 sudo systemctl start httpd
 sudo systemctl enable httpd
 
-sudo echo "<h1> Hello World new </h1>" > /var/www/html/index.html
+sudo echo "<h1> Hello World  </h1>" > /var/www/html/index.html
