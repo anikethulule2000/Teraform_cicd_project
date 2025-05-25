@@ -23,7 +23,6 @@ This project implements an automated CI/CD pipeline for provisioning AWS infrast
 1. Push changes to the main branch to trigger the pipeline
 2. Jenkins will:
    - Initialize Terraform
-   - Validate configuration
    - Generate execution plan
    - Wait for manual approval
    - Apply changes if approved
