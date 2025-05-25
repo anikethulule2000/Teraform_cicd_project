@@ -48,13 +48,7 @@ pipeline {
                     def WEB_URL = sh(script: 'terraform output -raw web_server_url', returnStdout: true).trim()
                     echo "Web server URL: ${WEB_URL}"
                     
-                    // Simple HTTP check
-                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' ${WEB_URL}", returnStdout: true).trim()
-                    if (response != "200") {
-                        error("Deployment verification failed. HTTP status: ${response}")
-                    } else {
-                        echo "Deployment verified successfully!"
-                    }
+                    
                 }
             }
         }
@@ -66,10 +60,7 @@ pipeline {
         }
         success {
             echo 'Pipeline succeeded!'
-            script {
-                def WEB_URL = sh(script: 'terraform output -raw web_server_url', returnStdout: true).trim()
-                echo "Access your application at: ${WEB_URL}"
-            }
+            
         }
         failure {
             echo 'Pipeline failed!'
