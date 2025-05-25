@@ -5,7 +5,7 @@ This project implements an automated CI/CD pipeline for provisioning AWS infrast
 
 ## Architecture
 ![Architecture Diagram](docs/architecture-diagram.png)
-![Capture](https://github.com/user-attachments/assets/8dc2b236-5a31-43fd-9848-ce4a86f64743)
+
 
 
 The solution consists of:
