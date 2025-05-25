@@ -91,7 +91,7 @@ pipeline {
     post {
         success {
             echo 'Pipeline succeeded!'
-            mail to: 'your-team@example.com',
+            mail to: 'anikethulule7219@gmail.com',
                  subject: "SUCCESS: Jenkins Pipeline '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                  body: """Good news!
 
@@ -105,7 +105,7 @@ Website URL: ${env.DEPLOYED_URL}
         }
         failure {
             echo 'Pipeline failed!'
-            mail to: 'your-team@example.com',
+            mail to: 'anikethulule7219@gmail.com',
                  subject: "FAILURE: Jenkins Pipeline '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                  body: """Attention required!
 
