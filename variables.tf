@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "key_name" {
   description = "Name of the SSH key pair to use for EC2 instance"
   type        = string
-  default     = "terraform_test"
+  
 }
 
 
