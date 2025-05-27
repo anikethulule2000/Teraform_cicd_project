@@ -114,7 +114,7 @@ resource "aws_security_group" "web_sg" {
 
 # EC2 Instance
 resource "aws_instance" "web_server" {
-  ami                    = "ami-0953476d60561c955"
+  ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
@@ -153,5 +153,5 @@ data "aws_ami" "amazon_linux_2" {
   }
 
   owners = ["amazon"]
-}data.aws_ami.amazon_linux_2.id
+}
 
