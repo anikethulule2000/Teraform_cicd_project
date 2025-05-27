@@ -8,7 +8,7 @@ terraform {
   backend "s3" {
     bucket = "terrform-cicd-state-file123"
     key    = "backend.tfstate"
-    region = var.aws_region
+    region = "us-east-1"
   }
 }
 
