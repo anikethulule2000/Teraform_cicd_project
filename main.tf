@@ -144,5 +144,14 @@ resource "aws_security_group" "db_sg" {
     Name = "devops-assessment-db-sg"
   }
 }
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
 
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
+  }
+
+  owners = ["amazon"]
+}data.aws_ami.amazon_linux_2.id
 
