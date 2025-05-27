@@ -5,7 +5,13 @@ terraform {
       version = "6.0.0-beta2"
     }
   }
+  backend "s3" {
+    bucket = "terrform-cicd-state-file123"
+    key    = "backend.tfstate"
+    region = var.aws_region
+  }
 }
+
 
 provider "aws" {
   region = var.aws_region
