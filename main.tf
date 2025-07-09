@@ -131,7 +131,7 @@ resource "aws_instance" "web_server" {
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   key_name               = var.key_name
   user_data              = file("${path.module}/scripts/install-apache.sh")
-
+  user_data_replace_on_change = true
   tags = {
     Name = "devops-assessment-web-server"
   }
