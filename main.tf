@@ -128,6 +128,13 @@ resource "aws_instance" "web_server" {
   key_name               = var.key_name
   user_data              = file("${path.module}/scripts/install-apache.sh")
 
+  lifecycle {
+  create_before_destroy = true
+  replace_triggered_by = [
+    filesha256("${path.module}/scripts/install-apache.sh")
+  ]
+}
+
   tags = {
     Name = "devops-assessment-web-server"
   }
