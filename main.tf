@@ -128,24 +128,11 @@ resource "aws_instance" "web_server" {
   key_name               = var.key_name
   user_data              = file("${path.module}/scripts/install-apache.sh")
 
-  lifecycle {
-    create_before_destroy = true
-    replace_triggered_by = [
-      null_resource.user_data_hash
-    ]
-  }
 
   tags = {
     Name = "devops-assessment-web-server"
   }
 }
-
-resource "null_resource" "user_data_hash" {
-  triggers = {
-    hash = filesha256("${path.module}/scripts/install-apache.sh")
-  }
-}
-
 
 # Database Security Group (for future use)
 resource "aws_security_group" "db_sg" {
