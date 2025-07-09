@@ -9,6 +9,7 @@ terraform {
     bucket = "terrform-cicd-state-file1234"
     key    = "backend.tfstate"
     region = "us-east-1"
+    dynamodb_table = "terraform-locks"
   }
 }
 
