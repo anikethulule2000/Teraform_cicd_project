@@ -16,10 +16,14 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform init -reconfigure '
+                sh 'terraform init '
             }
         }
-        
+        stage('Terraform fmt') {
+            steps {
+                sh 'terraform fmt '
+            }
+	}
 	stage('Terraform Validate') {
             steps {
                 sh 'terraform validate'
