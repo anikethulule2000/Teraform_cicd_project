@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "terrform-cicd-state-file123"
+    bucket = "terrform-cicd-state-file1234"
     key    = "backend.tfstate"
     region = "us-east-1"
   }
