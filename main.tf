@@ -5,14 +5,14 @@ terraform {
       version = "6.0.0-beta2"
     }
   }
+
   backend "s3" {
-    bucket = "terrform-cicd-state-file1234"
-    key    = "backend.tfstate"
-    region = "us-east-1"
+    bucket         = "terrform-cicd-state-file1234"
+    key            = "backend.tfstate"
+    region         = "us-east-1"
     dynamodb_table = "terraform-locks"
   }
 }
-
 
 provider "aws" {
   region = var.aws_region
@@ -23,6 +23,7 @@ resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = {
     Name = "devops-assessment-vpc"
   }
@@ -31,6 +32,7 @@ resource "aws_vpc" "main" {
 # Internet Gateway
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
+
   tags = {
     Name = "devops-assessment-igw"
   }
@@ -42,6 +44,7 @@ resource "aws_subnet" "public" {
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = true
+
   tags = {
     Name = "devops-assessment-public-subnet"
   }
@@ -52,6 +55,7 @@ resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "${var.aws_region}a"
+
   tags = {
     Name = "devops-assessment-private-subnet"
   }
@@ -121,17 +125,16 @@ resource "aws_security_group" "web_sg" {
 
 # EC2 Instance
 resource "aws_instance" "web_server" {
-  ami                    = data.aws_ami.amazon_linux_2.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.public.id
-  vpc_security_group_ids = [aws_security_group.web_sg.id]
-  key_name               = var.key_name
-  user_data              = file("${path.module}/scripts/install-apache.sh")
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  key_name               = var.key_name
+  user_data              = file("${path.module}/scripts/install-apache.sh")
 
-
-  tags = {
-    Name = "devops-assessment-web-server"
-  }
+  tags = {
+    Name = "devops-assessment-web-server"
+  }
 }
 
 # Database Security Group (for future use)
@@ -141,17 +144,19 @@ resource "aws_security_group" "db_sg" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description     = "MySQL"
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
-    cidr_blocks     = [aws_subnet.private.cidr_block]
+    description = "MySQL"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.private.cidr_block]
   }
 
   tags = {
     Name = "devops-assessment-db-sg"
   }
 }
+
+# AMI Data Source
 data "aws_ami" "amazon_linux_2" {
   most_recent = true
 
@@ -162,4 +167,3 @@ data "aws_ami" "amazon_linux_2" {
 
   owners = ["amazon"]
 }
-
